@@ -63,7 +63,7 @@ class TD_search(object):
             if k % c == 0:
                 self.agent.fix_model()
                 print("iter", k)
-                print("this is test 13:25")
+                print("this is test 15:25")
             if k > c:
                 self.ready = True
             self.play_game(k, maxiter=maxiter)
@@ -87,7 +87,6 @@ class TD_search(object):
 
         # Play a game of chess
         while not episode_end:
-            print("this is 1 step here!!!!!!!")
             state = np.expand_dims(self.env.layer_board.copy(), axis=0)
             state_value = self.agent.predict(state)
 
@@ -95,7 +94,7 @@ class TD_search(object):
             if self.env.board.turn:
 
                 # Do a Monte Carlo Tree Search after game iteration k
-                start_mcts_after = -1
+                start_mcts_after = 9999
                 if k > start_mcts_after:
                     tree = self.mcts(tree)
                     # Step the best move
@@ -258,7 +257,6 @@ class TD_search(object):
 
             # Select the best node from where to start MCTS
             while node.children:
-                print("finding the problem!!!")
                 node, move = node.select(color=color)
                 if not move:
                     # No move means that the node selects itself, not a child node.
