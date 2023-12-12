@@ -252,13 +252,13 @@ class TD_search(object):
             node.values = [0]
 
         while starttime + self.search_time > time.time() or sim_count < self.min_sim_count:
-            print("finding the problem!!!")
             depth = 0
             color = 1
             node_rewards = []
 
             # Select the best node from where to start MCTS
             while node.children:
+                print("finding the problem!!!")
                 node, move = node.select(color=color)
                 if not move:
                     # No move means that the node selects itself, not a child node.
