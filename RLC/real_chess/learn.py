@@ -57,6 +57,7 @@ class TD_search(object):
         Returns:
 
         """
+        print("this is test 13:25")
         starttime = time.time()
         for k in range(iters):
             self.env.reset()
@@ -93,7 +94,7 @@ class TD_search(object):
             if self.env.board.turn:
 
                 # Do a Monte Carlo Tree Search after game iteration k
-                start_mcts_after = -1
+                start_mcts_after = 9
                 if k > start_mcts_after:
                     tree = self.mcts(tree)
                     # Step the best move
