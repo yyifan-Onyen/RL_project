@@ -57,13 +57,13 @@ class TD_search(object):
         Returns:
 
         """
-        print("this is test 13:25")
         starttime = time.time()
         for k in range(iters):
             self.env.reset()
             if k % c == 0:
                 self.agent.fix_model()
                 print("iter", k)
+                print("this is test 13:25")
             if k > c:
                 self.ready = True
             self.play_game(k, maxiter=maxiter)
