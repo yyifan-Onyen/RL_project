@@ -87,6 +87,7 @@ class TD_search(object):
 
         # Play a game of chess
         while not episode_end:
+            print("this is 1 step here!!!!!!!")
             state = np.expand_dims(self.env.layer_board.copy(), axis=0)
             state_value = self.agent.predict(state)
 
