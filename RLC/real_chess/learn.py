@@ -94,7 +94,7 @@ class TD_search(object):
             if self.env.board.turn:
 
                 # Do a Monte Carlo Tree Search after game iteration k
-                start_mcts_after = 9999
+                start_mcts_after = -1
                 if k > start_mcts_after:
                     tree = self.mcts(tree)
                     # Step the best move
