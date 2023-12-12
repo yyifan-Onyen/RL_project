@@ -252,6 +252,7 @@ class TD_search(object):
             node.values = [0]
 
         while starttime + self.search_time > time.time() or sim_count < self.min_sim_count:
+            print("finding the problem!!!")
             depth = 0
             color = 1
             node_rewards = []
