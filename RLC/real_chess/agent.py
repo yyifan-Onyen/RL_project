@@ -3,7 +3,7 @@ from keras.losses import mean_squared_error
 from keras.models import Model, clone_model
 from keras.optimizers import RMSprop
 import numpy as np
-
+#weichen
 class MyopicAgent(object):
 
     def __init__(self, color=-1):
