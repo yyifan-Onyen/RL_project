@@ -146,33 +146,50 @@ class Agent(object):
                            loss=mean_squared_error
                            )
 
-    def init_bignet(self):
-        layer_state = Input(shape=(8, 8, 8), name='state')
-        conv_xs = Conv2D(4, (1, 1), activation='relu')(layer_state)
-        conv_s = Conv2D(8, (2, 2), strides=(1, 1), activation='relu')(layer_state)
-        conv_m = Conv2D(12, (3, 3), strides=(2, 2), activation='relu')(layer_state)
-        conv_l = Conv2D(16, (4, 4), strides=(2, 2), activation='relu')(layer_state)
-        conv_xl = Conv2D(20, (8, 8), activation='relu')(layer_state)
-        conv_rank = Conv2D(3, (1, 8), activation='relu')(layer_state)
-        conv_file = Conv2D(3, (8, 1), activation='relu')(layer_state)
+    # def init_bignet(self):
+    #     layer_state = Input(shape=(8, 8, 8), name='state')
+    #     conv_xs = Conv2D(4, (1, 1), activation='relu')(layer_state)
+    #     conv_s = Conv2D(8, (2, 2), strides=(1, 1), activation='relu')(layer_state)
+    #     conv_m = Conv2D(12, (3, 3), strides=(2, 2), activation='relu')(layer_state)
+    #     conv_l = Conv2D(16, (4, 4), strides=(2, 2), activation='relu')(layer_state)
+    #     conv_xl = Conv2D(20, (8, 8), activation='relu')(layer_state)
+    #     conv_rank = Conv2D(3, (1, 8), activation='relu')(layer_state)
+    #     conv_file = Conv2D(3, (8, 1), activation='relu')(layer_state)
 
-        f_xs = Flatten()(conv_xs)
-        f_s = Flatten()(conv_s)
-        f_m = Flatten()(conv_m)
-        f_l = Flatten()(conv_l)
-        f_xl = Flatten()(conv_xl)
-        f_r = Flatten()(conv_rank)
-        f_f = Flatten()(conv_file)
+    #     f_xs = Flatten()(conv_xs)
+    #     f_s = Flatten()(conv_s)
+    #     f_m = Flatten()(conv_m)
+    #     f_l = Flatten()(conv_l)
+    #     f_xl = Flatten()(conv_xl)
+    #     f_r = Flatten()(conv_rank)
+    #     f_f = Flatten()(conv_file)
 
-        dense1 = Concatenate(name='dense_bass')([f_xs, f_s, f_m, f_l, f_xl, f_r, f_f])
-        dense2 = Dense(256, activation='sigmoid')(dense1)
-        dense3 = Dense(128, activation='sigmoid')(dense2)
-        dense4 = Dense(56, activation='sigmoid')(dense3)
-        dense5 = Dense(64, activation='sigmoid')(dense4)
-        dense6 = Dense(32, activation='sigmoid')(dense5)
+    #     dense1 = Concatenate(name='dense_bass')([f_xs, f_s, f_m, f_l, f_xl, f_r, f_f])
+    #     dense2 = Dense(256, activation='sigmoid')(dense1)
+    #     dense3 = Dense(128, activation='sigmoid')(dense2)
+    #     dense4 = Dense(56, activation='sigmoid')(dense3)
+    #     dense5 = Dense(64, activation='sigmoid')(dense4)
+    #     dense6 = Dense(32, activation='sigmoid')(dense5)
 
-        value_head = Dense(1)(dense6)
+    #     value_head = Dense(1)(dense6)
 
+    #     self.model = Model(inputs=layer_state,
+    #                        outputs=value_head)
+    #     self.model.compile(optimizer=self.optimizer,
+    #                        loss=mean_squared_error
+    #                        )
+
+
+     def init_bignet(self):
+        #model2 -- autoencoder
+        input_layer = Input(shape=(8, 8, 8), name='state')
+        flattened_auto=Flatten()(input_layer)
+        #encoder
+        h1=Dense(256,activation='relu')(flattened_auto)
+        h2=Dense(128,activation='relu')(h1)
+        h3=Dense(64,activation='relu')(h2)
+        #decoder
+        value_head=Dense(1,activation='sigmoid')(h3)
         self.model = Model(inputs=layer_state,
                            outputs=value_head)
         self.model.compile(optimizer=self.optimizer,
