@@ -214,6 +214,7 @@ class Agent(object):
     #                        )
 
     def init_bignet(self):
+        print('weichen')
         layer_state = Input(shape=(8, 8, 8), name='state')
         conv_layers = [Conv2D(filters, kernel_size, activation='relu')(layer_state)
                     for filters, kernel_size in zip([2, 4, 6, 8, 5, 3, 3], 
