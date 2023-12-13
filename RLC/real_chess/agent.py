@@ -1,4 +1,4 @@
-from keras.layers import Input, Dense, Flatten, Concatenate, Conv2D, Dropout
+from keras.layers import Input, Dense, Flatten, Concatenate, Conv2D, Dropout, GraphConv, Dot
 from keras.losses import mean_squared_error
 from keras.models import Model, clone_model, load_model
 from keras.optimizers import SGD, Adam, RMSprop
@@ -179,22 +179,56 @@ class Agent(object):
     #                        loss=mean_squared_error
     #                        )
 
+    # def init_bignet(self):
+    #     print('encoder decoer')
+    #     #model2 -- autoencoder
+    #     input_layer = Input(shape=(8, 8, 8), name='state')
+    #     flattened_auto=Flatten()(input_layer)
+    #     #encoder
+    #     h1=Dense(256,activation='relu')(flattened_auto)
+    #     h2=Dense(128,activation='relu')(h1)
+    #     h3=Dense(64,activation='relu')(h2)
+    #     #decoder
+    #     value_head=Dense(1,activation='sigmoid')(h3)
+    #     self.model = Model(inputs=input_layer,
+    #                        outputs=value_head)
+    #     self.model.compile(optimizer=self.optimizer,
+    #                        loss=mean_squared_error
+    #                        )
+        
+    # def init_bignet(self):
+    #     print('GraphConv')
+    #     #model2 -- autoencoder
+    #     input_layer = Input(shape=(8, 8, 8), name='state')
+    #     flattened_auto=Flatten()(input_layer)
+    #     #encoder
+    #     h1=Dense(256,activation='relu')(flattened_auto)
+    #     h2=Dense(128,activation='relu')(h1)
+    #     h3=Dense(64,activation='relu')(h2)
+    #     #decoder
+    #     value_head=Dense(1,activation='sigmoid')(h3)
+    #     self.model = Model(inputs=input_layer,
+    #                        outputs=value_head)
+    #     self.model.compile(optimizer=self.optimizer,
+    #                        loss=mean_squared_error
+    #                        )
+
     def init_bignet(self):
-        print('encoder decoer')
-        #model2 -- autoencoder
-        input_layer = Input(shape=(8, 8, 8), name='state')
-        flattened_auto=Flatten()(input_layer)
-        #encoder
-        h1=Dense(256,activation='relu')(flattened_auto)
-        h2=Dense(128,activation='relu')(h1)
-        h3=Dense(64,activation='relu')(h2)
-        #decoder
-        value_head=Dense(1,activation='sigmoid')(h3)
-        self.model = Model(inputs=input_layer,
-                           outputs=value_head)
-        self.model.compile(optimizer=self.optimizer,
-                           loss=mean_squared_error
-                           )
+        layer_state = Input(shape=(8, 8, 8), name='state')
+        conv_layers = [Conv2D(filters, kernel_size, activation='relu')(layer_state)
+                    for filters, kernel_size in zip([2, 4, 6, 8, 5, 3, 3], 
+                                                    [(1, 1), (2, 2), (3, 3), (4, 4), (8, 8), (1, 8), (8, 1)])]
+        flattened_layers = [Flatten()(conv) for conv in conv_layers]
+        concatenated = Concatenate(name='concatenate')(flattened_layers)
+
+        dense = Dense(256, activation='relu')(concatenated)
+        dense = Dropout(0.5)(dense)  # prevent overfitting
+        dense = Dense(128, activation='relu')(dense)
+        dense = Dense(64, activation='relu')(dense)
+        dense = Dense(32, activation='relu')(dense)
+        value_head = Dense(1)(dense)
+        self.model = Model(inputs=layer_state, outputs=value_head)
+        self.model.compile(optimizer='adam', loss='mean_squared_error')
 
     def predict_distribution(self, states, batch_size=256):
         """
