@@ -190,7 +190,7 @@ class Agent(object):
         h3=Dense(64,activation='relu')(h2)
         #decoder
         value_head=Dense(1,activation='sigmoid')(h3)
-        self.model = Model(inputs=layer_state,
+        self.model = Model(inputs=input_layer,
                            outputs=value_head)
         self.model.compile(optimizer=self.optimizer,
                            loss=mean_squared_error
