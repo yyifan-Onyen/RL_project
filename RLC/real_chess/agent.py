@@ -179,8 +179,8 @@ class Agent(object):
     #                        loss=mean_squared_error
     #                        )
 
-
-     def init_bignet(self):
+    def init_bignet(self):
+        print('encoder decoer')
         #model2 -- autoencoder
         input_layer = Input(shape=(8, 8, 8), name='state')
         flattened_auto=Flatten()(input_layer)
