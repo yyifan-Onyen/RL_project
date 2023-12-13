@@ -18,7 +18,7 @@ mapper["K"] = 5
 
 class Board(object):
 
-    def __init__(self, opposing_agent, FEN=None, capture_reward_factor=0.01):
+    def __init__(self, opposing_agent, FEN=None, capture_reward_factor=1):
         """
         Chess Board Environment
         Args:
@@ -89,13 +89,13 @@ class Board(object):
             reward = 0
             episode_end = False
         elif result == "1-0":
-            reward = 1
+            reward = 100
             episode_end = True
         elif result == "0-1":
-            reward = -1
+            reward = -100
             episode_end = True
         elif result == "1/2-1/2":
-            reward = 0
+            reward = 20
             episode_end = True
         reward += auxiliary_reward
 
