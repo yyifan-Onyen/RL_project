@@ -1,16 +1,7 @@
 import numpy as np
 import time
 from RLC.real_chess.tree import Node
-import math
 import gc
-
-
-# def softmax(x, temperature=1):
-#     return np.exp(x / temperature) / np.sum(np.exp(x / temperature))
-
-
-# def sigmoid(x):
-#     return 1 / (1 + math.exp(-x))
 
 
 class TD_search(object):
