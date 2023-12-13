@@ -52,42 +52,16 @@ class Agent(object):
         self.model = Model(inputs=layer_state, outputs=value_head)
         self.model.compile(optimizer='adam', loss='mean_squared_error')
 
-    # def predict_distribution(self, states, batch_size=256):
-    #     """
-    #     :param states: list of distinct states
-    #     :param n:  each state is predicted n times
-    #     :return:
-    #     """
-    #     predictions_per_state = int(batch_size / len(states))
-    #     state_batch = []
-    #     for state in states:
-    #         state_batch = state_batch + [state for x in range(predictions_per_state)]
-
-    #     state_batch = np.stack(state_batch, axis=0)
-    #     predictions = self.model.predict(state_batch)
-    #     predictions = predictions.reshape(len(states), predictions_per_state)
-    #     mean_pred = np.mean(predictions, axis=1)
-    #     std_pred = np.std(predictions, axis=1)
-    #     upper_bound = mean_pred + 2 * std_pred
-
-    #     return mean_pred, std_pred, upper_bound
 
     def predict(self, board_layer):
         return self.model.predict(board_layer)
 
     def TD_update(self, states, rewards, sucstates, episode_active, gamma=0.9):
         # Compute the TD target.
-        suc_state_values = self.fixed_model.predict(sucstates)
-        V_target = np.array(rewards) + np.array(episode_active) * gamma * np.squeeze(suc_state_values)
+        succer_state_value = self.fixed_model.predict(sucstates)
+        V_target = np.array(rewards) + np.array(episode_active) * gamma * np.squeeze(succer_state_value)
         # Perform a step of minibatch Gradient Descent.
         self.model.fit(x=states, y=V_target, epochs=1, verbose=0)
         V_state = self.model.predict(states)  # V_state is a list of lists
         td_errors = V_target - np.squeeze(V_state)
-        return td_errors
-
-    def MC_update(self, states, returns):
-        # Perform a step of minibatch Gradient Descent.
-        self.model.fit(x=states, y=returns, epochs=0, verbose=0)
-        V_state = np.squeeze(self.model.predict(states))
-        td_errors = returns - V_state
         return td_errors
