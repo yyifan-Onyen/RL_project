@@ -63,6 +63,5 @@ class Agent(object):
         # Perform a step of minibatch Gradient Descent.
         self.model.fit(x=states, y=V_target, epochs=1, verbose=0)
         V_state = self.model.predict(states)  # V_state is a list of lists
-        print(V_state)
         td_errors = V_target - np.squeeze(V_state)
         return td_errors
