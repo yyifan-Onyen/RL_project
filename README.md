@@ -1,6 +1,6 @@
 
 # Reinforcement Learning Chess
-#### Arjan Groen
+
 
 
 
